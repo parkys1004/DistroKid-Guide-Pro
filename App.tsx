@@ -1,6 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+  const [rateDate, setRateDate] = useState<string>('');
+
+  useEffect(() => {
+    // Fetch current exchange rate
+    fetch('https://api.exchangerate-api.com/v4/latest/USD')
+      .then(res => res.json())
+      .then(data => {
+        setExchangeRate(data.rates.KRW);
+        setRateDate(new Date(data.date).toLocaleDateString('ko-KR'));
+      })
+      .catch(err => {
+        console.error("Failed to fetch rates", err);
+        setExchangeRate(1450); // Fallback rate
+      });
+  }, []);
+
+  // Block display for Plans (Main pricing)
+  const renderPlanKRW = (usdPrice: number) => {
+    if (!exchangeRate) return <span className="text-xs text-slate-500 animate-pulse">환율 계산 중...</span>;
+    const krw = Math.round((usdPrice * exchangeRate) / 10) * 10;
+    return (
+      <div className="flex items-center gap-2 mt-1">
+        <span className="text-lg font-bold text-sky-400">
+          약 ₩{krw.toLocaleString()}
+        </span>
+        <span className="text-xs text-slate-500 font-normal">
+          (오늘 시세)
+        </span>
+      </div>
+    );
+  };
+
+  // Inline display for small texts/tables
+  const formatKRW = (usd: number) => {
+    if (!exchangeRate) return "...";
+    const krw = usd * exchangeRate;
+    // For small amounts (rates), show decimal. For large amounts, round to 10 won.
+    if (krw < 100) {
+      return `약 ₩${krw.toFixed(1)}`;
+    }
+    return `약 ₩${(Math.round(krw / 10) * 10).toLocaleString()}`;
+  };
+
   return (
     <div className="bg-slate-950 text-slate-50 min-h-screen font-sans selection:bg-sky-500 selection:text-white">
       {/* Navigation */}
@@ -79,13 +123,24 @@ const App = () => {
         <section id="pricing" className="scroll-mt-20">
             <div className="flex items-center gap-4 mb-8">
                 <div className="h-10 w-2 bg-sky-500 rounded-full"></div>
-                <h2 className="text-3xl font-bold">전략적 요금제 분석</h2>
+                <div>
+                  <h2 className="text-3xl font-bold">전략적 요금제 분석</h2>
+                  {exchangeRate && (
+                    <p className="text-xs text-slate-400 mt-2">
+                      <i className="fas fa-coins mr-1"></i>
+                      적용 환율: 1 USD = {exchangeRate.toLocaleString()} KRW ({rateDate} 기준)
+                    </p>
+                  )}
+                </div>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
                 {/* Musician */}
                 <div className="card p-6 flex flex-col border-slate-700">
                     <h3 className="text-lg font-bold mb-2">Musician</h3>
-                    <p className="text-3xl font-bold mb-4">$24.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                    <div className="mb-4">
+                      <p className="text-3xl font-bold">$24.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                      {renderPlanKRW(24.99)}
+                    </div>
                     <p className="text-sm text-slate-400 mb-6 font-medium">취미 아티스트용 기본 플랜 </p>
                     <ul className="text-sm space-y-3 mb-8 flex-grow">
                         <li className="flex items-center"><i className="fas fa-check text-green-500 mr-2"></i> 무제한 음원 업로드</li>
@@ -99,7 +154,10 @@ const App = () => {
                 <div className="card p-6 flex flex-col border-sky-500/50 bg-sky-500/5 shadow-xl shadow-sky-500/10 relative">
                     <div className="bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded absolute -top-3 right-6">MOST POPULAR</div>
                     <h3 className="text-lg font-bold mb-2">Musician Plus</h3>
-                    <p className="text-3xl font-bold mb-4">$44.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                    <div className="mb-4">
+                      <p className="text-3xl font-bold">$44.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                      {renderPlanKRW(44.99)}
+                    </div>
                     <p className="text-sm text-slate-400 mb-6 font-medium">전략적 마케팅 필수 </p>
                     <ul className="text-sm space-y-3 mb-8 flex-grow">
                         <li className="flex items-center font-semibold text-sky-400"><i className="fas fa-check mr-2"></i> 발매일/예약일 지정</li>
@@ -112,13 +170,16 @@ const App = () => {
                 {/* Ultimate */}
                 <div className="card p-6 flex flex-col border-slate-700">
                     <h3 className="text-lg font-bold mb-2">Ultimate</h3>
-                    <p className="text-3xl font-bold mb-4">$89.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                    <div className="mb-4">
+                      <p className="text-3xl font-bold">$89.99 <span className="text-sm font-normal text-slate-400">/연간</span></p>
+                      {renderPlanKRW(89.99)}
+                    </div>
                     <p className="text-sm text-slate-400 mb-6 font-medium">레이블 및 대규모 관리 </p>
                     <ul className="text-sm space-y-3 mb-8 flex-grow">
                         <li className="flex items-center"><i className="fas fa-check text-green-500 mr-2"></i> 아티스트 5~100인</li>
-                        <li className="flex items-center text-indigo-400"><i className="fas fa-check mr-2"></i> 1TB Instant Share</li>
-                        <li className="flex items-center text-indigo-400"><i className="fas fa-check mr-2"></i> 플레이리스트 연락처 정보</li>
-                        <li className="flex items-center text-indigo-400"><i className="fas fa-check mr-2"></i> RIAA 골드/플래티넘 모니터링</li>
+                        <li className="flex items-center"><i className="fas fa-check text-green-500 mr-2"></i> 1TB Instant Share</li>
+                        <li className="flex items-center"><i className="fas fa-check text-green-500 mr-2"></i> 플레이리스트 연락처 정보</li>
+                        <li className="flex items-center"><i className="fas fa-check text-green-500 mr-2"></i> RIAA 골드/플래티넘 모니터링</li>
                         <li className="flex items-center text-indigo-400"><i className="fas fa-check mr-2"></i> Artist Protection</li>
                     </ul>
                 </div>
@@ -139,8 +200,12 @@ const App = () => {
                         <div className="flex justify-between border-b border-slate-700 pb-2">
                             <span>권장 포맷</span><span className="text-sky-400">24-bit / 96kHz</span>
                         </div>
-                        <div className="flex justify-between border-b border-slate-700 pb-2">
-                            <span>Dolby Atmos</span><span className="text-indigo-400">$26.99 (선택)</span>
+                        <div className="flex justify-between border-b border-slate-700 pb-2 flex-wrap">
+                            <span>Dolby Atmos</span>
+                            <span className="text-indigo-400 flex flex-col items-end">
+                                <span>$26.99</span>
+                                <span className="text-xs text-slate-500 font-normal">{formatKRW(26.99)} (선택)</span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -187,32 +252,53 @@ const App = () => {
                         <tr>
                             <td className="p-4 font-bold">Spotify</td>
                             <td className="p-4">100,000 Streams</td>
-                            <td className="p-4 text-sky-400">$400.00</td>
-                            <td className="p-4">평균 $0.004 적용 </td>
+                            <td className="p-4 text-sky-400">
+                                <div>$400.00</div>
+                                <div className="text-xs text-slate-500 font-normal">{formatKRW(400)}</div>
+                            </td>
+                            <td className="p-4">
+                                평균 $0.004 <span className="text-slate-500">({formatKRW(0.004)})</span> 적용 
+                            </td>
                         </tr>
                         <tr>
                             <td className="p-4 font-bold">Apple Music</td>
                             <td className="p-4">20,000 Streams</td>
-                            <td className="p-4 text-indigo-400">$160.00</td>
-                            <td className="p-4">평균 $0.008 적용 (고단가) </td>
+                            <td className="p-4 text-indigo-400">
+                                <div>$160.00</div>
+                                <div className="text-xs text-slate-500 font-normal">{formatKRW(160)}</div>
+                            </td>
+                            <td className="p-4">
+                                평균 $0.008 <span className="text-slate-500">({formatKRW(0.008)})</span> 적용 (고단가) 
+                            </td>
                         </tr>
                         <tr>
                             <td className="p-4 font-bold">TikTok</td>
                             <td className="p-4">1,000 Creations</td>
-                            <td className="p-4 text-pink-400">$30.00</td>
-                            <td className="p-4">영상 생성당 $0.03 정산 </td>
+                            <td className="p-4 text-pink-400">
+                                <div>$30.00</div>
+                                <div className="text-xs text-slate-500 font-normal">{formatKRW(30)}</div>
+                            </td>
+                            <td className="p-4">
+                                영상 생성당 $0.03 <span className="text-slate-500">({formatKRW(0.03)})</span> 정산 
+                            </td>
                         </tr>
                         <tr>
                             <td className="p-4 font-bold">YouTube Content ID</td>
                             <td className="p-4">50,000 Views (UGC)</td>
-                            <td className="p-4 text-red-500">$50.00</td>
+                            <td className="p-4 text-red-500">
+                                <div>$50.00</div>
+                                <div className="text-xs text-slate-500 font-normal">{formatKRW(50)}</div>
+                            </td>
                             <td className="p-4">UGC 광고 수익 80% 정산 </td>
                         </tr>
                     </tbody>
                     <tfoot className="bg-slate-800/50">
                         <tr>
                             <td colSpan={2} className="p-4 text-right font-bold">합계 (추정값)</td>
-                            <td className="p-4 text-xl font-bold text-white">$640.00</td>
+                            <td className="p-4 text-xl font-bold text-white">
+                                <div>$640.00</div>
+                                <div className="text-sm text-slate-400 font-normal">{formatKRW(640)}</div>
+                            </td>
                             <td className="p-4"></td>
                         </tr>
                     </tfoot>
