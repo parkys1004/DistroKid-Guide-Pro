@@ -1,8 +1,66 @@
 import React, { useState, useEffect } from 'react';
 
+// Checklist Data Structure
+const checklistSteps = [
+  {
+    badge: "D-42",
+    title: "콘텐츠 준비",
+    items: [
+      { id: "d42-wav", text: "최종 WAV 마스터 (24-bit)" },
+      { id: "d42-art", text: "앨범 아트 (3000px)" },
+      { id: "d42-canvas", text: "Spotify Canvas 제작" },
+      { id: "d42-motion", text: "Apple Motion Art 제작" },
+    ]
+  },
+  {
+    badge: "D-28",
+    title: "업로드 및 설정",
+    items: [
+      { id: "d28-upload", text: "금요일 발매일 지정 업로드" },
+      { id: "d28-meta", text: "메타데이터/크레딧 정밀 입력 [20]" },
+      { id: "d28-split", text: "Splits 수익 배분 초대 [11]" },
+      { id: "d28-contentid", text: "YouTube Content ID 신청 [21]" },
+    ]
+  },
+  {
+    badge: "D-14",
+    title: "사전 마케팅",
+    items: [
+      { id: "d14-hyper", text: "HyperFollow 페이지 공개" },
+      { id: "d14-presave", text: "Pre-save 캠페인 집중 홍보" },
+      { id: "d14-pitch", text: "Spotify 에디토리얼 피칭 [20, 22, 23]" },
+      { id: "d14-ads", text: "소셜 광고 집행 시작" },
+    ]
+  },
+  {
+    badge: "Day 1+",
+    title: "정산 및 분석",
+    items: [
+      { id: "day1-tax", text: "W-8BEN 세금 양식 완료" },
+      { id: "day1-stats", text: "실시간 통계 유입 분석 [6]" },
+      { id: "day1-retarget", text: "주요 국가 마케팅 리타겟팅" },
+      { id: "day1-payout", text: "수익 인출 수단 연동 [24]" },
+    ]
+  }
+];
+
 const App = () => {
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [rateDate, setRateDate] = useState<string>('');
+  
+  // Checklist Persistence State
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('distrokid_checklist_v1');
+        return saved ? JSON.parse(saved) : {};
+      } catch (e) {
+        console.error("Failed to load checklist", e);
+        return {};
+      }
+    }
+    return {};
+  });
 
   useEffect(() => {
     // Fetch current exchange rate
@@ -17,6 +75,14 @@ const App = () => {
         setExchangeRate(1450); // Fallback rate
       });
   }, []);
+
+  const toggleCheck = (id: string) => {
+    setCheckedItems(prev => {
+      const newState = { ...prev, [id]: !prev[id] };
+      localStorage.setItem('distrokid_checklist_v1', JSON.stringify(newState));
+      return newState;
+    });
+  };
 
   // Block display for Plans (Main pricing)
   const renderPlanKRW = (usdPrice: number) => {
@@ -362,46 +428,32 @@ const App = () => {
                 <h2 className="text-3xl font-bold">발매 타임라인 체크리스트</h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
-                    <span className="absolute -top-4 -left-4 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-sky-400 border border-slate-700">D-42</span>
-                    <h4 className="font-bold mb-4 pt-2">콘텐츠 준비</h4>
+              {checklistSteps.map((step) => (
+                <div key={step.badge} className="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
+                    <span className="absolute -top-4 -left-4 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-sky-400 border border-slate-700">
+                      {step.badge}
+                    </span>
+                    <h4 className="font-bold mb-4 pt-2">{step.title}</h4>
                     <div className="space-y-3 text-xs text-slate-300">
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 최종 WAV 마스터 (24-bit)</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 앨범 아트 (3000px)</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> Spotify Canvas 제작</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> Apple Motion Art 제작</label>
+                      {step.items.map((item) => (
+                        <label 
+                          key={item.id} 
+                          className={`flex items-center gap-2 cursor-pointer select-none transition-opacity ${checkedItems[item.id] ? 'opacity-50' : 'opacity-100'}`}
+                        >
+                          <input 
+                            type="checkbox" 
+                            className="w-4 h-4 rounded border-slate-700 accent-sky-500"
+                            checked={!!checkedItems[item.id]}
+                            onChange={() => toggleCheck(item.id)}
+                          /> 
+                          <span className={checkedItems[item.id] ? 'line-through text-slate-500' : ''}>
+                            {item.text}
+                          </span>
+                        </label>
+                      ))}
                     </div>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
-                    <span className="absolute -top-4 -left-4 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-sky-400 border border-slate-700">D-28</span>
-                    <h4 className="font-bold mb-4 pt-2">업로드 및 설정</h4>
-                    <div className="space-y-3 text-xs text-slate-300">
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 금요일 발매일 지정 업로드 </label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 메타데이터/크레딧 정밀 입력 [20]</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> Splits 수익 배분 초대 [11]</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> YouTube Content ID 신청 [21]</label>
-                    </div>
-                </div>
-                <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
-                    <span className="absolute -top-4 -left-4 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-sky-400 border border-slate-700">D-14</span>
-                    <h4 className="font-bold mb-4 pt-2">사전 마케팅</h4>
-                    <div className="space-y-3 text-xs text-slate-300">
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> HyperFollow 페이지 공개</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> Pre-save 캠페인 집중 홍보</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> Spotify 에디토리얼 피칭 [20, 22, 23]</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 소셜 광고 집행 시작</label>
-                    </div>
-                </div>
-                <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl relative">
-                    <span className="absolute -top-4 -left-4 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-sky-400 border border-slate-700">Day 1+</span>
-                    <h4 className="font-bold mb-4 pt-2">정산 및 분석</h4>
-                    <div className="space-y-3 text-xs text-slate-300">
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> W-8BEN 세금 양식 완료 </label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 실시간 통계 유입 분석 [6]</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 주요 국가 마케팅 리타겟팅</label>
-                        <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="w-4 h-4 rounded border-slate-700 accent-sky-500"/> 수익 인출 수단 연동 [24]</label>
-                    </div>
-                </div>
+              ))}
             </div>
         </section>
 
