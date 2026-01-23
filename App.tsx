@@ -465,11 +465,16 @@ const App = () => {
             <div className="text-slate-400 text-sm">
                 <p>&copy; 2026 DistroKid Strategy Report. <br/>본 가이드는 실제 2026년 1월 음악 시장 환경 리서치를 바탕으로 제작되었습니다.</p>
             </div>
-            <div className="flex gap-6 text-slate-400 text-xl">
-                <i className="fab fa-spotify hover:text-green-500 transition cursor-pointer"></i>
-                <i className="fab fa-apple hover:text-white transition cursor-pointer"></i>
-                <i className="fab fa-tiktok hover:text-pink-500 transition cursor-pointer"></i>
-                <i className="fab fa-youtube hover:text-red-500 transition cursor-pointer"></i>
+            <div>
+              <a 
+                href="https://kmong.com/self-marketing/730531/ZQh4nXZpK5" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold py-2 px-6 rounded-full transition flex items-center gap-2"
+              >
+                <span>SUNO 패키지 구매</span>
+                <i className="fas fa-external-link-alt text-sm"></i>
+              </a>
             </div>
         </div>
       </footer>
