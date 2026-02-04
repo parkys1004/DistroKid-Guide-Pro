@@ -17,9 +17,9 @@ const checklistSteps = [
     title: "업로드 및 설정",
     items: [
       { id: "d28-upload", text: "금요일 발매일 지정 업로드" },
-      { id: "d28-meta", text: "메타데이터/크레딧 정밀 입력 [20]" },
-      { id: "d28-split", text: "Splits 수익 배분 초대 [11]" },
-      { id: "d28-contentid", text: "YouTube Content ID 신청 [21]" },
+      { id: "d28-meta", text: "메타데이터/크레딧 정밀 입력" },
+      { id: "d28-split", text: "Splits 수익 배분 초대" },
+      { id: "d28-contentid", text: "YouTube Content ID 신청" },
     ]
   },
   {
@@ -28,7 +28,7 @@ const checklistSteps = [
     items: [
       { id: "d14-hyper", text: "HyperFollow 페이지 공개" },
       { id: "d14-presave", text: "Pre-save 캠페인 집중 홍보" },
-      { id: "d14-pitch", text: "Spotify 에디토리얼 피칭 [20, 22, 23]" },
+      { id: "d14-pitch", text: "Spotify 에디토리얼 피칭" },
       { id: "d14-ads", text: "소셜 광고 집행 시작" },
     ]
   },
@@ -37,9 +37,9 @@ const checklistSteps = [
     title: "정산 및 분석",
     items: [
       { id: "day1-tax", text: "W-8BEN 세금 양식 완료" },
-      { id: "day1-stats", text: "실시간 통계 유입 분석 [6]" },
+      { id: "day1-stats", text: "실시간 통계 유입 분석" },
       { id: "day1-retarget", text: "주요 국가 마케팅 리타겟팅" },
-      { id: "day1-payout", text: "수익 인출 수단 연동 [24]" },
+      { id: "day1-payout", text: "수익 인출 수단 연동" },
     ]
   }
 ];
@@ -177,9 +177,9 @@ const App = () => {
                 <div className="card p-8">
                     <h3 className="text-xl font-bold mb-4 text-indigo-400"><i className="fas fa-robot mr-2"></i>AI 음원 규제 및 Disclosure</h3>
                     <ul className="space-y-3 text-slate-300">
-                        <li>• <strong>AI 태깅 의무화:</strong> DDEX 표준에 따른 AI 참여 정보 명시 필요 [1, 2]</li>
+                        <li>• <strong>AI 태깅 의무화:</strong> DDEX 표준에 따른 AI 참여 정보 명시 필요</li>
                         <li>• <strong>사칭 금지:</strong> 특정 아티스트 목소리 무단 복제 시 배포 반려 </li>
-                        <li>• <strong>권리 증명:</strong> 유료 플랜을 통한 상업적 권리 확보 필수 [3, 4]</li>
+                        <li>• <strong>권리 증명:</strong> 유료 플랜을 통한 상업적 권리 확보 필수</li>
                     </ul>
                 </div>
             </div>
@@ -261,7 +261,7 @@ const App = () => {
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="card p-8">
                     <h3 className="font-bold text-lg mb-4 underline decoration-sky-500">Audio (WAV)</h3>
-                    <p className="text-sm text-slate-400 mb-4">최소 16-bit/44.1kHz 필수 [5, 6, 7]</p>
+                    <p className="text-sm text-slate-400 mb-4">최소 16-bit/44.1kHz 필수</p>
                     <div className="space-y-4">
                         <div className="flex justify-between border-b border-slate-700 pb-2">
                             <span>권장 포맷</span><span className="text-sky-400">24-bit / 96kHz</span>
@@ -287,12 +287,12 @@ const App = () => {
                 </div>
                 <div className="card p-8">
                     <h3 className="font-bold text-lg mb-4 underline decoration-indigo-500">Apple Motion Art</h3>
-                    <p className="text-sm text-slate-400 mb-4">첫 프레임과 정적 아트 일치 필수 [8, 5, 1]</p>
+                    <p className="text-sm text-slate-400 mb-4">첫 프레임과 정적 아트 일치 필수</p>
                     <div className="space-y-2 text-sm">
-                        <p>• 3:4 (iPhone/Android) [8, 5, 1]</p>
-                        <p>• 1:1 (iPad/Mac/TV) [8, 5, 1]</p>
-                        <p>• 길이: 15~35초 [8, 5, 1]</p>
-                        <p>• 코덱: H.264 / ProRes 422 [8, 5, 1]</p>
+                        <p>• 3:4 (iPhone/Android)</p>
+                        <p>• 1:1 (iPad/Mac/TV)</p>
+                        <p>• 길이: 15~35초</p>
+                        <p>• 코덱: H.264 / ProRes 422</p>
                     </div>
                 </div>
             </div>
@@ -387,7 +387,7 @@ const App = () => {
                         <div className="card p-6">
                             <h4 className="font-bold text-sky-400 mb-2">Pre-save 캠페인 효과</h4>
                             <p className="text-sm text-slate-300 leading-relaxed">
-                                발매 전 Pre-save는 Spotify Release Radar의 가장 강력한 트리거입니다. 정량 분석 결과, 사전 저장이 많은 곡은 발매 첫 주 노출이 3.5배 증가합니다. [9, 10, 11, 12]
+                                발매 전 Pre-save는 Spotify Release Radar의 가장 강력한 트리거입니다. 정량 분석 결과, 사전 저장이 많은 곡은 발매 첫 주 노출이 3.5배 증가합니다.
                             </p>
                         </div>
                         <div className="card p-6 border-l-4 border-l-indigo-500">
@@ -396,7 +396,7 @@ const App = () => {
                                 $Algorithm\ Priority = \alpha \times (Initial\ Saves) + \beta \times (Completion\ Rate) - \gamma \times (Skip\ Rate)$
                             </p>
                             <p className="mt-4 text-xs text-slate-400">
-                                2026년에는 저장과 청취 완료율의 가중치(α, β)가 스킵률(γ) 페널티보다 높게 설정됩니다. [13, 10, 14]
+                                2026년에는 저장과 청취 완료율의 가중치(α, β)가 스킵률(γ) 페널티보다 높게 설정됩니다.
                             </p>
                         </div>
                     </div>
@@ -406,15 +406,15 @@ const App = () => {
                     <div className="space-y-6">
                         <div className="flex gap-4">
                             <div className="h-8 w-8 bg-sky-500 rounded-full flex items-center justify-center font-bold">1</div>
-                            <p className="text-sm">팬의 이메일 수집을 통한 직접 마케팅 채널 확보 [15, 16, 17]</p>
+                            <p className="text-sm">팬의 이메일 수집을 통한 직접 마케팅 채널 확보</p>
                         </div>
                         <div className="flex gap-4">
                             <div className="h-8 w-8 bg-sky-500 rounded-full flex items-center justify-center font-bold">2</div>
-                            <p className="text-sm">소셜 미디어 유입 플랫폼(FB, IG, TikTok) 데이터 분석 [12, 15, 18]</p>
+                            <p className="text-sm">소셜 미디어 유입 플랫폼(FB, IG, TikTok) 데이터 분석</p>
                         </div>
                         <div className="flex gap-4">
                             <div className="h-8 w-8 bg-sky-500 rounded-full flex items-center justify-center font-bold">3</div>
-                            <p className="text-sm">전환 최적화를 위한 픽셀 연동 및 광고 타겟팅 데이터로 활용 [13, 12, 19]</p>
+                            <p className="text-sm">전환 최적화를 위한 픽셀 연동 및 광고 타겟팅 데이터로 활용</p>
                         </div>
                     </div>
                 </div>
